@@ -12,10 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from environs import Env
-
-env=Env()
-env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -82,15 +78,14 @@ WSGI_APPLICATION = 'myApp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'RESTfulAPIDB',
-        'USER':'postgres',
-        'PASSWORD':'postgres',
-        'HOST': '192.168.99.100',
-        'PORT':'',
+        'ENGINE': os.getenv('DATABASE_ENGINE'),
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER':os.getenv('DATABASE_USER'),
+        'PASSWORD':os.getenv('DATABASE_PASSWORD'),
+        'HOST':os.getenv('DATABASE_HOST'),
+        'PORT':os.getenv('DATABASE_PORT')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
