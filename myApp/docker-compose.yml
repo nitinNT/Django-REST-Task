@@ -1,0 +1,30 @@
+version : '3'
+
+services:
+    db:
+        image: postgres:11
+        ports:
+            - "5432:5432"
+        environment:
+            - "POSTGRES_USER=postgres"
+            - "POSTGRES_DB=DBName"
+            - "POSTGRES_PASSWORD=postgres"
+
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+    web:
+        build : .
+        ports: 
+            - "8000:8000"
+        environment: 
+            - "DATABASE_ENGINE=django.db.backends.postgresql"
+            - "DATABASE_NAME=DBName"
+            - "DATABASE_USER=postgres"
+            - "DATABASE_PASSWORD=postgres"
+            - "DATABASE_HOST=db"
+            - "DATABASE_PORT=5432"
+        command: bash -c "python manage.py makemigrations webapp && python manage.py migrate && gunicorn -b :8000 -w 3 myApp.wsgi"
+        depends_on:
+            - db
+volumes:
+    postgres_data:
